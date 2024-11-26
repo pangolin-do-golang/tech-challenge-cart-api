@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/cart"
-	"github.com/pangolin-do-golang/tech-challenge/internal/errutil"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/errutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

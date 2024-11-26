@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pangolin-do-golang/tech-challenge/internal/adapters/rest/handler"
-	"github.com/pangolin-do-golang/tech-challenge/internal/adapters/rest/middleware"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/cart"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/product"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/rest/handler"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/rest/middleware"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
 )
 
 type RestServer struct {
