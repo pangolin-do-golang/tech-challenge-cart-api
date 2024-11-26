@@ -5,23 +5,23 @@ import (
 )
 
 type Service struct {
-	repo Repository
+	repository Repository
 }
 
 func NewProductService(repo Repository) *Service {
 	return &Service{
-		repo: repo,
+		repository: repo,
 	}
 }
 
 func (s *Service) Search(search string, category string) (*[]Product, error) {
-	return s.repo.Search(search, category)
+	return s.repository.Search(search, category)
 }
 
 func (s *Service) Delete(id uuid.UUID) error {
-	return s.repo.Delete(id)
+	return s.repository.Delete(id)
 }
 
 func (s *Service) GetByID(id uuid.UUID) (*Product, error) {
-	return s.repo.GetByID(id)
+	return s.repository.GetByID(id)
 }

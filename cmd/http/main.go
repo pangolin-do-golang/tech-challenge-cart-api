@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/pangolin-do-golang/tech-challenge/docs"
-	dbAdapter "github.com/pangolin-do-golang/tech-challenge/internal/adapters/db"
-	"github.com/pangolin-do-golang/tech-challenge/internal/adapters/rest/server"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/cart"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/product"
+	_ "github.com/pangolin-do-golang/tech-challenge-cart-api/docs"
+	dbAdapter "github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/db"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/rest/server"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
