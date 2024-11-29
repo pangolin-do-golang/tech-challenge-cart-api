@@ -57,7 +57,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.21.0
         with:
           image-ref: "ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}"
-          format: 'github'
+          format: 'table'
           scan-type: 'image'
           exit-code: '1'
           ignore-unfixed: true
