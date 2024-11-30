@@ -85,7 +85,7 @@ func (_m *IService) GetFullCart(clientID uuid.UUID) (*cart.Cart, error) {
 	return r0, r1
 }
 
-// LoadCart provides a mock function with given fields: ctx, clientID
+// LoadCart provides a mock function with given fields: clientID
 func (_m *IService) LoadCart(clientID uuid.UUID) (*cart.Cart, error) {
 	ret := _m.Called(clientID)
 
