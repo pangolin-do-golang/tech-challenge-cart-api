@@ -6,11 +6,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
-	"gorm.io/gorm"
 )
 
 type PostgresProductRepository struct {
-	db *gorm.DB
+	db IDB
 }
 
 type ProductPostgres struct {
@@ -25,14 +24,14 @@ func (pp ProductPostgres) TableName() string {
 	return "product"
 }
 
-func NewPostgresProductRepository(db *gorm.DB) product.Repository {
+func NewPostgresProductRepository(db IDB) product.Repository {
 	return &PostgresProductRepository{db: db}
 }
 
 func (repo *PostgresProductRepository) GetByID(id uuid.UUID) (*product.Product, error) {
 	var dbRecord ProductPostgres
 
-	if err := repo.db.Where("id = ? and deleted_at is null", id).First(&dbRecord).Error; err != nil {
+	if err := repo.db.First(&dbRecord, "id = ? and deleted_at is null", id).Error; err != nil {
 		return nil, err
 	}
 

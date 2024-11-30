@@ -10,7 +10,7 @@ import (
 )
 
 type PostgresCartRepository struct {
-	db *gorm.DB
+	db IDB
 }
 
 type CartPostgres struct {
@@ -24,7 +24,7 @@ func (op CartPostgres) TableName() string {
 	return "cart"
 }
 
-func NewPostgresCartRepository(db *gorm.DB) cart.ICartRepository {
+func NewPostgresCartRepository(db IDB) cart.ICartRepository {
 	return &PostgresCartRepository{db: db}
 }
 
