@@ -31,7 +31,7 @@ type ICartProductRepository interface {
 }
 
 type IService interface {
-	LoadCart(ctx context.Context, clientID uuid.UUID) (*Cart, error)
+	LoadCart(clientID uuid.UUID) (*Cart, error)
 	GetFullCart(clientID uuid.UUID) (*Cart, error)
 	AddProduct(ctx context.Context, clientID uuid.UUID, product *Product) error
 	RemoveProduct(ctx context.Context, clientID uuid.UUID, productID uuid.UUID) error

@@ -19,7 +19,7 @@ func NewService(cartRepository ICartRepository, cartProductsRepository ICartProd
 	}
 }
 
-func (s *Service) LoadCart(_ context.Context, clientID uuid.UUID) (*Cart, error) {
+func (s *Service) LoadCart(clientID uuid.UUID) (*Cart, error) {
 	cart, err := s.CartRepository.Get(clientID)
 	if err != nil {
 		if !errors.Is(err, errutil.ErrRecordNotFound) {
@@ -53,7 +53,7 @@ func (s *Service) GetFullCart(clientID uuid.UUID) (*Cart, error) {
 }
 
 func (s *Service) Cleanup(clientID uuid.UUID) error {
-	cart, err := s.LoadCart(context.Background(), clientID)
+	cart, err := s.LoadCart(clientID)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (s *Service) Cleanup(clientID uuid.UUID) error {
 }
 
 func (s *Service) AddProduct(ctx context.Context, clientID uuid.UUID, product *Product) error {
-	cart, err := s.LoadCart(ctx, clientID)
+	cart, err := s.LoadCart(clientID)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (s *Service) AddProduct(ctx context.Context, clientID uuid.UUID, product *P
 }
 
 func (s *Service) RemoveProduct(ctx context.Context, clientID uuid.UUID, productID uuid.UUID) error {
-	cart, err := s.LoadCart(ctx, clientID)
+	cart, err := s.LoadCart(clientID)
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,7 @@ func (s *Service) RemoveProduct(ctx context.Context, clientID uuid.UUID, product
 }
 
 func (s *Service) EditProduct(ctx context.Context, clientID uuid.UUID, product *Product) error {
-	cart, err := s.LoadCart(ctx, clientID)
+	cart, err := s.LoadCart(clientID)
 	if err != nil {
 		return err
 	}

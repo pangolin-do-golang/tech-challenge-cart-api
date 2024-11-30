@@ -13,4 +13,7 @@ func RegisterCartHandlers(router *gin.Engine, service cart.IService) {
 	router.POST("/cart/add-product", cartController.AddProduct)
 	router.POST("/cart/remove-product", cartController.RemoveProduct)
 	router.POST("/cart/edit-product", cartController.EditProduct)
+	router.POST("/cart/cleanup", cartController.Cleanup)
+	router.POST("/cart/loadcart", cartController.LoardCart)
+
 }
