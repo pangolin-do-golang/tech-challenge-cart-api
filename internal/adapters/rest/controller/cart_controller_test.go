@@ -1,6 +1,7 @@
 package controller_test
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/rest/controller"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/mocks"
@@ -45,6 +46,27 @@ func TestAddProduct_InvalidPayload(t *testing.T) {
 
 	if w.Code != http.StatusBadRequest {
 		t.Errorf("Expected status 400, got %d", w.Code)
+	}
+}
+
+func TestAddProduct_Err(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	mockService := new(mocks.IService)
+	mockService.
+		On("AddProduct", mock.Anything, mock.Anything, mock.Anything).
+		Return(errors.New("error"))
+	ctrl := controller.NewCartController(mockService)
+	router.POST("/cart/add-product", ctrl.AddProduct)
+
+	payload := `{"client_id":"123e4567-e89b-12d3-a456-426614174000","product_id":"123e4567-e89b-12d3-a456-426614174001","quantity":1}`
+	req, _ := http.NewRequest(http.MethodPost, "/cart/add-product", strings.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status 200, got %d", w.Code)
 	}
 }
 

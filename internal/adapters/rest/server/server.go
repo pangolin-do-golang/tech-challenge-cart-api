@@ -11,12 +11,12 @@ import (
 )
 
 type RestServer struct {
-	productService *product.Service
+	productService product.IProductService
 	cartService    cart.IService
 }
 
 type RestServerOptions struct {
-	ProductService *product.Service
+	ProductService product.IProductService
 	CartService    cart.IService
 }
 

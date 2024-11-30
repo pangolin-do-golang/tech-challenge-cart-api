@@ -6,7 +6,7 @@ import (
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
 )
 
-func RegisterProductHandlers(router *gin.Engine, service *product.Service) {
+func RegisterProductHandlers(router *gin.Engine, service product.IProductService) {
 	productController := controller.NewProductController(service)
 
 	router.GET("/product", productController.Search)
