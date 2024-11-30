@@ -1,4 +1,4 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pangolin-do-golang_tech-challenge&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pangolin-do-golang_tech-challenge) ![Known Vulnerabilities](https://snyk.io/test/github/pcbarretos/pangolin-do-golang/tech-challenge/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pangolin-do-golang_tech-challenge-cart-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pangolin-do-golang_tech-challenge) ![Known Vulnerabilities](https://snyk.io/test/github/pcbarretos/pangolin-do-golang/tech-challenge/badge.svg)
 
 [Coverage Report](https://sonarcloud.io/summary/overall?id=pangolin-do-golang_tech-challenge-cart-api)
 
@@ -127,7 +127,7 @@ The order of execution is:
 You can forward the port with the following command:
 
 ```bash
-kubectl port-forward svc/tech-challenge-service 4000:80 -n dev
+kubectl port-forward svc/tech-challenge-cart-api-service 4000:80 -n dev
 ```
 
 ### Kubernates Architecture
