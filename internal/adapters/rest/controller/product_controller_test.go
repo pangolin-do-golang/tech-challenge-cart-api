@@ -28,6 +28,23 @@ func TestSearchProducts_Success(t *testing.T) {
 	}
 }
 
+func TestSearchProducts_Error(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	mockService := new(mocks.IProductService)
+	mockService.On("Search", mock.Anything, mock.Anything).Return(nil, errors.New("error"))
+	ctrl := controller.NewProductController(mockService)
+	router.GET("/product", ctrl.Search)
+
+	req, _ := http.NewRequest(http.MethodGet, "/product?search=phone&category=electronics", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status 500, got %d", w.Code)
+	}
+}
+
 func TestDeleteProduct_Success(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
@@ -49,7 +66,6 @@ func TestDeleteProduct_InvalidID(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 	mockService := new(mocks.IProductService)
-	mockService.On("Search", mock.Anything).Return(errors.New("error"))
 	ctrl := controller.NewProductController(mockService)
 	router.DELETE("/product/:id", ctrl.Delete)
 
@@ -59,5 +75,22 @@ func TestDeleteProduct_InvalidID(t *testing.T) {
 
 	if w.Code != http.StatusBadRequest {
 		t.Errorf("Expected status 400, got %d", w.Code)
+	}
+}
+
+func TestDeleteProduct_Error(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	mockService := new(mocks.IProductService)
+	mockService.On("Delete", mock.Anything).Return(errors.New("error"))
+	ctrl := controller.NewProductController(mockService)
+	router.DELETE("/product/:id", ctrl.Delete)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodDelete, "/product/123e4567-e89b-12d3-a456-426614174000", nil)
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status 500, got %d", w.Code)
 	}
 }
