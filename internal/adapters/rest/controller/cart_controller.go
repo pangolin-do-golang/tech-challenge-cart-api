@@ -157,11 +157,10 @@ func (ctrl CartController) Overview(c *gin.Context) {
 }
 
 type CleanupPayload struct {
-		ClientID uuid.UUID `json:"client_id" binding:"required" format:"uuid"`
+	ClientID uuid.UUID `json:"client_id" binding:"required" format:"uuid"`
 }
 
-
-func (ctrl CartController) Cleanup (c *gin.Context) {
+func (ctrl CartController) Cleanup(c *gin.Context) {
 	payload := &CleanupPayload{}
 
 	err := c.BindJSON(payload)
@@ -185,23 +184,22 @@ type LoadCardPayload struct {
 	ClientID uuid.UUID `json:"client_id" binding:"required" format:"uuid"`
 }
 
+func (ctrl CartController) LoadCart(c *gin.Context) {
+	payload := &LoadCardPayload{}
 
-func (ctrl CartController) LoardCart (c *gin.Context) {
-payload := &LoadCardPayload{}
+	err := c.BindJSON(payload)
 
-err := c.BindJSON(payload)
+	if err != nil {
+		ctrl.Error(c, errutil.NewInputError(err))
+		return
+	}
 
-if err != nil {
-	ctrl.Error(c, errutil.NewInputError(err))
-	return
-}
+	cart, err := ctrl.service.LoadCart(payload.ClientID)
 
-cart, err := ctrl.service.LoadCart(payload.ClientID)
+	if err != nil {
+		ctrl.Error(c, err)
+		return
+	}
 
-if err != nil {
-	ctrl.Error(c, err)
-	return
-}
-
-c.JSON(http.StatusOK, cart)
+	c.JSON(http.StatusOK, cart)
 }
