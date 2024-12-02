@@ -30,7 +30,7 @@ jobs:
       - name: Build And Test
         shell: bash
         run: |
-          go test ./internal/... -coverprofile=./coverage.out
+          go test -cover ./internal/... -coverprofile=./coverage.out -coverpkg=./internal/...
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -39,6 +39,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           SHA: ${{ steps.short-sha.outputs.sha }}
         with:
+        with:
+          projectBaseDir: ./
           args: >
             -Dsonar.organization=pangolin-golang
             -Dsonar.projectKey=pangolin-do-golang_tech-challenge-cart-api
