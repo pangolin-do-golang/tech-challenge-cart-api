@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
-	"github.com/pangolin-do-golang/tech-challenge/internal/errutil"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/errutil"
 )
 
 type Service struct {
@@ -12,7 +12,7 @@ type Service struct {
 	CartProductsRepository ICartProductRepository
 }
 
-func NewService(cartRepository ICartRepository, cartProductsRepository ICartProductRepository) IService {
+func NewService(cartRepository ICartRepository, cartProductsRepository ICartProductRepository) *Service {
 	return &Service{
 		CartRepository:         cartRepository,
 		CartProductsRepository: cartProductsRepository,
@@ -33,7 +33,6 @@ func (s *Service) LoadCart(clientID uuid.UUID) (*Cart, error) {
 	}
 
 	return cart, nil
-
 }
 
 func (s *Service) GetFullCart(clientID uuid.UUID) (*Cart, error) {
@@ -59,6 +58,10 @@ func (s *Service) Cleanup(clientID uuid.UUID) error {
 	}
 
 	products, err := s.CartProductsRepository.GetByCartID(context.Background(), cart.ID)
+	if err != nil {
+		return err
+	}
+
 	for _, p := range products {
 		err = s.CartProductsRepository.DeleteByProductID(context.Background(), cart.ID, p.ProductID)
 		if err != nil {
@@ -75,7 +78,6 @@ func (s *Service) AddProduct(ctx context.Context, clientID uuid.UUID, product *P
 		return err
 	}
 
-	// TODO verificar se produto já tá no carrinho/colocar índice de unicidade
 	return s.CartProductsRepository.Create(ctx, cart.ID, product)
 }
 
@@ -85,18 +87,7 @@ func (s *Service) RemoveProduct(ctx context.Context, clientID uuid.UUID, product
 		return err
 	}
 
-	products, err := s.CartProductsRepository.GetByCartID(ctx, cart.ID)
-	if err != nil {
-		return err
-	}
-
-	for _, product := range products {
-		if product.ProductID == productID {
-			return s.CartProductsRepository.DeleteByProductID(ctx, cart.ID, productID)
-		}
-	}
-
-	return nil
+	return s.CartProductsRepository.DeleteByProductID(ctx, cart.ID, productID)
 }
 
 func (s *Service) EditProduct(ctx context.Context, clientID uuid.UUID, product *Product) error {

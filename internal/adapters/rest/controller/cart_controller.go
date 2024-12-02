@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/cart"
-	"github.com/pangolin-do-golang/tech-challenge/internal/errutil"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/errutil"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
