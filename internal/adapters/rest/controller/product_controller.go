@@ -3,17 +3,17 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/product"
-	"github.com/pangolin-do-golang/tech-challenge/internal/errutil"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/errutil"
 	"net/http"
 )
 
 type ProductController struct {
 	AbstractController
-	service *product.Service
+	service product.IProductService
 }
 
-func NewProductController(service *product.Service) *ProductController {
+func NewProductController(service product.IProductService) *ProductController {
 	return &ProductController{
 		service: service,
 	}

@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/pangolin-do-golang/tech-challenge/internal/core/cart"
-	"gorm.io/gorm"
+	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
 )
 
 type PostgresCartProductsRepository struct {
-	db *gorm.DB
+	db IDB
 }
 
 type CartProductsPostgres struct {
@@ -26,7 +25,7 @@ func (op *CartProductsPostgres) TableName() string {
 	return "cart_products"
 }
 
-func NewPostgresCartProductsRepository(db *gorm.DB) cart.ICartProductRepository {
+func NewPostgresCartProductsRepository(db IDB) cart.ICartProductRepository {
 	return &PostgresCartProductsRepository{db: db}
 }
 
@@ -48,7 +47,7 @@ func (p *PostgresCartProductsRepository) Create(_ context.Context, cartID uuid.U
 
 func (p *PostgresCartProductsRepository) GetByCartID(_ context.Context, cartID uuid.UUID) ([]*cart.Product, error) {
 	var cartProducts []CartProductsPostgres
-	err := p.db.Where("cart_id = ?", cartID).Find(&cartProducts).Error
+	err := p.db.Find(&cartProducts, "cart_id = ?", cartID).Error
 	if err != nil {
 		return nil, err
 	}
