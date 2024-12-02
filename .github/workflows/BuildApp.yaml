@@ -22,6 +22,7 @@ jobs:
         id: short-sha
         with:
           length: 7
+
       - name: Setup GoLang
         uses: actions/setup-go@v3
         with:
@@ -30,7 +31,7 @@ jobs:
       - name: Build And Test
         shell: bash
         run: |
-          go test -cover ./internal/... -coverprofile=./coverage.out -coverpkg=./internal/...
+          go test -cover ./internal/... -covermode=atomic -coverprofile=coverage.out
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -47,7 +48,7 @@ jobs:
             -Dsonar.language=go
             -Dsonar.qualitygate.wait=true
             -Dsonar.tests=internal/
-            -Dsonar.go.coverage.reportPaths=./coverage.out            
+            -Dsonar.go.coverage.reportPaths=coverage.out            
             -Dsonar.verbose=true
 
       - name: Login to GitHub Container Registry
