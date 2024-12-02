@@ -39,7 +39,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           SHA: ${{ steps.short-sha.outputs.sha }}
         with:
-        with:
           projectBaseDir: ./
           args: >
             -Dsonar.organization=pangolin-golang
