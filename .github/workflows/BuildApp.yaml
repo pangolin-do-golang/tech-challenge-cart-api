@@ -23,6 +23,15 @@ jobs:
         id: short-sha
         with:
           length: 7
+      - name: Setup GoLang
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.23.3'
+
+      - name: Build And Test
+        shell: bash
+        run: |
+          go test -v ./internal/... -coverprofile=./coverage.out
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -35,8 +44,10 @@ jobs:
             -Dsonar.organization=pangolin-golang
             -Dsonar.projectKey=pangolin-do-golang_tech-challenge-cart-api
             -Dsonar.projectVersion=${{ env.SHA }}
+            -Dsonar.language=go
             -Dsonar.qualitygate.wait=true
             -Dsonar.tests=internal/
+            -Dsonar.go.coverage.reportPaths=./coverage.out            
             -Dsonar.verbose=true
 
       - name: Login to GitHub Container Registry
