@@ -10,6 +10,7 @@ func RegisterProductHandlers(router *gin.Engine, service product.IProductService
 	productController := controller.NewProductController(service)
 
 	router.GET("/product", productController.Search)
+	router.GET("product/:id", productController.GetById)
 
 	router.DELETE("/product/:id")
 }
