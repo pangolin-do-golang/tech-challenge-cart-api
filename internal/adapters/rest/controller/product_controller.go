@@ -1,11 +1,12 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/pangolin-do-golang/tech-challenge/internal/core/product"
 	"github.com/pangolin-do-golang/tech-challenge/internal/errutil"
-	"net/http"
 )
 
 type ProductController struct {
@@ -66,4 +67,22 @@ func (ctrl *ProductController) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNoContent, gin.H{})
+}
+
+func (ctrl *ProductController) GetById(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+
+	if err != nil {
+		ctrl.Error(c, errutil.NewInputError(err))
+		return
+	}
+
+	product, err := ctrl.service.GetByID(id)
+
+	if err != nil {
+		ctrl.Error(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
 }
