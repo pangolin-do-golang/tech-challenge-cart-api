@@ -1,12 +1,15 @@
 package db_test
 
 import (
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/adapters/db"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/product"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"testing"
 )
 
@@ -54,4 +57,37 @@ func TestGetByID_ReturnsError(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 	mockDB.AssertExpectations(t)
+}
+
+func TestProductSearch(t *testing.T) {
+	d, m, err := sqlmock.New()
+	conn, err := gorm.Open(postgres.New(postgres.Config{Conn: d, DriverName: "postgres"}))
+
+	m.ExpectQuery("SELECT .+").WillReturnRows(
+		sqlmock.NewRows([]string{"id", "name", "description", "category", "price"}).
+			AddRow(uuid.New(), "Test Product", "Test Description", "Test Category", 100.0).
+			AddRow(uuid.New(), "Test Product 2", "Test Description 2", "Test Category", 200.0),
+	)
+	repo := db.NewPostgresProductRepository(conn)
+	_, err = repo.Search("search", "category")
+
+	assert.NoError(t, err)
+}
+
+func TestProductDelete(t *testing.T) {
+	d, m, err := sqlmock.New()
+	conn, err := gorm.Open(postgres.New(postgres.Config{Conn: d, DriverName: "postgres"}))
+
+	m.ExpectQuery("SELECT .+").WillReturnRows(
+		sqlmock.NewRows([]string{"id", "name", "description", "category", "price"}).
+			AddRow(uuid.New(), "Test Product", "Test Description", "Test Category", 100.0),
+	)
+
+	m.ExpectBegin()
+	m.ExpectExec("UPDATE .+").WillReturnResult(sqlmock.NewResult(0, 1))
+	m.ExpectCommit()
+	repo := db.NewPostgresProductRepository(conn)
+	err = repo.Delete(uuid.New())
+
+	assert.NoError(t, err)
 }
