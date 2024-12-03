@@ -1,9 +1,10 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/core/cart"
 	"github.com/pangolin-do-golang/tech-challenge-cart-api/internal/errutil"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -153,4 +154,52 @@ func (ctrl CartController) Overview(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, fullcart)
+}
+
+type CleanupPayload struct {
+	ClientID uuid.UUID `json:"client_id" binding:"required" format:"uuid"`
+}
+
+func (ctrl CartController) Cleanup(c *gin.Context) {
+	payload := &CleanupPayload{}
+
+	err := c.BindJSON(payload)
+
+	if err != nil {
+		ctrl.Error(c, errutil.NewInputError(err))
+		return
+	}
+
+	err = ctrl.service.Cleanup(payload.ClientID)
+
+	if err != nil {
+		ctrl.Error(c, err)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+type LoadCardPayload struct {
+	ClientID uuid.UUID `json:"client_id" binding:"required" format:"uuid"`
+}
+
+func (ctrl CartController) LoadCart(c *gin.Context) {
+	payload := &LoadCardPayload{}
+
+	err := c.BindJSON(payload)
+
+	if err != nil {
+		ctrl.Error(c, errutil.NewInputError(err))
+		return
+	}
+
+	cart, err := ctrl.service.LoadCart(payload.ClientID)
+
+	if err != nil {
+		ctrl.Error(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, cart)
 }
