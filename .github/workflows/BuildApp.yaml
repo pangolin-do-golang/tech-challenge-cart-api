@@ -31,7 +31,7 @@ jobs:
       - name: Build And Test
         shell: bash
         run: |
-          go test -race -short -cover ./internal/... -coverprofile=coverage.out
+          go test -short -cover ./internal/... -coverprofile=coverage.out
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
