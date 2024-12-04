@@ -93,7 +93,10 @@ jobs:
         shell: bash
         run: aws eks update-kubeconfig --region us-east-1 --name development
 
+      - name: Cat kubeconfig
+        run: cat ${HOME}/.kube/config
+
       - uses: actions-hub/kubectl@master
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
-          args: set image deployment/tech-challenge tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
+          args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
