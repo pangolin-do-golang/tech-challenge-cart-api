@@ -102,15 +102,15 @@ jobs:
           kubectl config use-context arn:aws:eks:us-east-1:637423374452:cluster/development
           kubectl get nodes
           
-      - uses: actions-hub/kubectl@master
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'       
-        with:
-          args: apply ./deploy/k8s/
-
       # - uses: actions-hub/kubectl@master
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   env:
-      #     KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
-      #     KUBE_HOST: ${{ secrets.KUBE_HOST }}
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'       
       #   with:
-      #     args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
+      #     args: apply ./deploy/k8s/
+
+      - uses: actions-hub/kubectl@master
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_HOST: ${{ secrets.KUBE_HOST }}
+        with:
+          args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
