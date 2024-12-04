@@ -103,6 +103,7 @@ jobs:
       - uses: actions-hub/kubectl@master
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_HOST: ${{ secrets.KUBE_HOST }}
         with:
           args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
