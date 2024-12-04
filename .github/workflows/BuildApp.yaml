@@ -19,7 +19,7 @@ jobs:
 
       - name: Configure AWS Credentials 2
         uses: aws-actions/configure-aws-credentials@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           aws-region: us-east-1
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -88,22 +88,20 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           IMAGE_TAG: ${{ steps.short-sha.outputs.sha }}
 
-      - name: Login to AWS
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        shell: bash
-        run: aws eks update-kubeconfig --region us-east-1 --name development
+      # - name: Login to AWS
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   shell: bash
+      #   run: aws eks update-kubeconfig --region us-east-1 --name development
 
       - uses: actions-hub/kubectl@master
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'       
         with:
-          args: get pods
+          args: apply ./deploy/k8s/
 
-      - uses: actions-hub/kubectl@master
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
-          KUBE_HOST: ${{ secrets.KUBE_HOST }}
-        with:
-          args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
+      # - uses: actions-hub/kubectl@master
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   env:
+      #     KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+      #     KUBE_HOST: ${{ secrets.KUBE_HOST }}
+      #   with:
+      #     args: set image deployment/tech-challenge-deployment tech-challenge-container=ghcr.io/${{ github.repository }}:${{ steps.short-sha.outputs.sha }}
