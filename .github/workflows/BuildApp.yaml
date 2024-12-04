@@ -93,6 +93,15 @@ jobs:
       #   shell: bash
       #   run: aws eks update-kubeconfig --region us-east-1 --name development
 
+      - name: get KubeConfig
+        shell: bash
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name development > KUBE_CONFIG
+          export KUBE_CONFIG=$KUBE_CONFIG >> $GITHUB_ENV
+          kubectl config get-contexts
+          kubectl config use-context development
+          kubectl get nodes
+          
       - uses: actions-hub/kubectl@master
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'       
         with:
